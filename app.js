@@ -91,7 +91,7 @@ function initKanjiPage({
 
   function syncToggleAllButton(){
     const allChecked = checkedById.length > 0 && checkedById.every(v => v);
-    toggleAllBtn.textContent = allChecked ? "全部の読みを非表示" : "全部の読みを表示";
+    toggleAllBtn.textContent = allChecked ? "すべての読みを非表示" : "すべての読みを表示";
     toggleAllBtn.dataset.mode = allChecked ? "hide" : "show";
   }
 
