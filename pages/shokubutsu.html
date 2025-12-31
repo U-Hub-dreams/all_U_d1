@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>漢字練習（読み）植物編</title>
+  <link rel="stylesheet" href="../style.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="titleblock">
+        <h1>漢字練習（読み）植物編</h1>
+        <p class="sub">チェックを入れた行だけ「読み」を表示します。上のボタンで一括表示/非表示もできます。</p>
+      </div>
+      <div class="toolbar">
+        <a class="btn" href="../index.html">まとめに戻る</a>
+        <a class="btn" href="./sakana.html">魚編へ</a>
+        <button id="toggleAllBtn" class="btn primary" type="button">全部の読みを表示</button>
+      </div>
+    </header>
+
+    <section class="panel" aria-label="植物編リスト">
+      <div class="grid head" role="rowgroup">
+        <div class="cell" role="columnheader">漢字</div>
+        <div class="cell" role="columnheader">読み</div>
+        <div class="cell" role="columnheader" style="justify-content:flex-end;">読みを表示</div>
+      </div>
+
+      <div id="tableBody" class="grid body" role="rowgroup"></div>
+    </section>
+
+    <div class="footer">
+      ※「読み」は非表示時に “ぼかし” や “伏せ字” を使わず、要素自体を完全に隠しています。
+    </div>
+  </div>
+
+  <script src="../app.js"></script>
+  <script>
+    const items = [
+      { kanji: "桜", yomi: "さくら" },
+      { kanji: "椿", yomi: "つばき" },
+      { kanji: "朝顔", yomi: "あさがお" },
+      { kanji: "紫陽花", yomi: "あじさい" },
+      { kanji: "向日葵", yomi: "ひまわり" },
+      { kanji: "蒲公英", yomi: "たんぽぽ" }
+    ];
+
+    initKanjiPage({ items });
+  </script>
+</body>
+</html>
