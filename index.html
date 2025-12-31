@@ -3,353 +3,48 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>漢字練習（読み）</title>
-  <meta name="description" content="チェックで読みを表示できる漢字練習サイト" />
-  <style>
-    :root{
-      --bg: #0b1220;
-      --card: rgba(255,255,255,.08);
-      --card2: rgba(255,255,255,.12);
-      --text: rgba(255,255,255,.92);
-      --muted: rgba(255,255,255,.70);
-      --line: rgba(255,255,255,.12);
-      --accent: #7dd3fc; /* light cyan */
-      --accent2:#a78bfa; /* violet */
-      --shadow: 0 12px 30px rgba(0,0,0,.35);
-      --radius: 18px;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family: system-ui, -apple-system, "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic", sans-serif;
-      color:var(--text);
-      background:
-        radial-gradient(1200px 600px at 10% 10%, rgba(125,211,252,.22), transparent 60%),
-        radial-gradient(900px 500px at 90% 20%, rgba(167,139,250,.18), transparent 55%),
-        radial-gradient(800px 600px at 40% 100%, rgba(34,197,94,.10), transparent 55%),
-        var(--bg);
-      min-height:100svh;
-    }
-    .wrap{
-      max-width: 980px;
-      margin: 0 auto;
-      padding: 20px 14px 40px;
-    }
-
-    header{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:12px;
-      margin-bottom: 14px;
-    }
-    .titleblock{
-      display:flex;
-      flex-direction:column;
-      gap:6px;
-    }
-    h1{
-      margin:0;
-      font-size: clamp(20px, 3.6vw, 28px);
-      letter-spacing:.02em;
-    }
-    .sub{
-      margin:0;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.4;
-    }
-
-    .toolbar{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      flex-wrap:wrap;
-      justify-content:flex-end;
-    }
-
-    /* Button (押した感触) */
-    .btn{
-      appearance:none;
-      border:1px solid rgba(255,255,255,.18);
-      background: linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.08));
-      color: var(--text);
-      padding: 10px 14px;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 14px;
-      cursor:pointer;
-      box-shadow: 0 10px 20px rgba(0,0,0,.25);
-      transform: translateY(0);
-      transition: transform .08s ease, box-shadow .08s ease, border-color .15s ease, background .15s ease;
-      user-select:none;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .btn:hover{
-      border-color: rgba(255,255,255,.28);
-      background: linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,.10));
-    }
-    .btn:active{
-      transform: translateY(2px);
-      box-shadow: 0 6px 14px rgba(0,0,0,.22);
-    }
-    .btn:focus-visible{
-      outline: 3px solid rgba(125,211,252,.55);
-      outline-offset: 2px;
-    }
-
-    .panel{
-      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
-      border: 1px solid rgba(255,255,255,.14);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-    }
-
-    .grid{
-      display:grid;
-      grid-template-columns: 1fr 1fr 120px;
-    }
-
-    .row{
-      display:contents; /* 罫線の代わりにスペース感で見せる */
-    }
-
-    .cell{
-      padding: 14px 14px;
-      display:flex;
-      align-items:center;
-      gap:10px;
-      min-height: 54px;
-    }
-
-    .head .cell{
-      padding: 14px 14px;
-      font-size: 13px;
-      color: var(--muted);
-      font-weight: 800;
-      letter-spacing: .08em;
-      text-transform: none;
-      background: rgba(255,255,255,.06);
-    }
-
-    /* 行ごとの区切り：罫線は薄め＆主張しない */
-    .body .cell{
-      border-top: 1px solid rgba(255,255,255,.08);
-      background: rgba(255,255,255,.02);
-    }
-    .body .cell:nth-child(6n+1),
-    .body .cell:nth-child(6n+2),
-    .body .cell:nth-child(6n+3){
-      background: rgba(255,255,255,.03);
-    }
-
-    .kanji{
-      font-size: clamp(18px, 3.8vw, 22px);
-      font-weight: 900;
-      letter-spacing: .03em;
-    }
-    .yomi{
-      font-size: 16px;
-      font-weight: 700;
-      color: rgba(255,255,255,.90);
-      letter-spacing: .02em;
-    }
-
-    /* “完全に表示しない”ため、非表示時は要素自体を hidden */
-    .yomi[hidden]{
-      display:none !important;
-    }
-
-    /* Checkbox: 押した感触 */
-    .checkwrap{
-      justify-content:flex-end;
-    }
-    .cb{
-      width: 44px;
-      height: 28px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.18);
-      background: rgba(255,255,255,.08);
-      position: relative;
-      cursor: pointer;
-      flex: 0 0 auto;
-      box-shadow: 0 8px 16px rgba(0,0,0,.22);
-      transition: transform .08s ease, box-shadow .08s ease, border-color .15s ease, background .15s ease;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .cb:active{
-      transform: translateY(2px);
-      box-shadow: 0 5px 12px rgba(0,0,0,.18);
-    }
-    .cb input{
-      position:absolute;
-      inset:0;
-      opacity:0;
-      margin:0;
-      cursor:pointer;
-    }
-    .knob{
-      position:absolute;
-      top:50%;
-      left: 4px;
-      width: 20px;
-      height: 20px;
-      border-radius: 999px;
-      transform: translateY(-50%);
-      background: rgba(255,255,255,.88);
-      box-shadow: 0 6px 14px rgba(0,0,0,.25);
-      transition: left .18s ease, background .18s ease;
-    }
-    .cb:has(input:checked){
-      background: linear-gradient(180deg, rgba(125,211,252,.40), rgba(167,139,250,.22));
-      border-color: rgba(125,211,252,.55);
-    }
-    .cb:has(input:checked) .knob{
-      left: 20px;
-      background: white;
-    }
-
-    .footer{
-      margin-top: 12px;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.6;
-      padding: 0 4px;
-    }
-
-    /* Responsive: スマホではチェック列を少し縮める */
-    @media (max-width: 520px){
-      .grid{ grid-template-columns: 1fr 1fr 92px; }
-      .cell{ padding: 12px 12px; min-height: 52px; }
-      .btn{ padding: 10px 12px; font-size: 13px; }
-    }
-  </style>
+  <title>漢字練習（読み）まとめ</title>
+  <meta name="description" content="テーマ別の漢字練習ページへ移動できます" />
+  <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
   <div class="wrap">
     <header>
       <div class="titleblock">
-        <h1>漢字練習（読み）</h1>
-        <p class="sub">チェックを入れた行だけ「読み」を表示します。上のボタンで一括表示/非表示もできます。</p>
+        <h1>漢字練習（読み）まとめ</h1>
+        <p class="sub">テーマ別ページへ移動できます。今後ページを増やすときは、ここにカードを追加するだけです。</p>
       </div>
       <div class="toolbar">
-        <button id="toggleAllBtn" class="btn" type="button">全部の読みを表示</button>
+        <a class="btn primary" href="./pages/shokubutsu.html">植物編へ</a>
+        <a class="btn primary" href="./pages/sakana.html">魚編へ</a>
       </div>
     </header>
 
-    <section class="panel" aria-label="漢字練習リスト">
-      <div class="grid head" role="rowgroup">
-        <div class="cell" role="columnheader">漢字</div>
-        <div class="cell" role="columnheader">読み</div>
-        <div class="cell" role="columnheader" style="justify-content:flex-end;">読みを表示</div>
-      </div>
+    <section class="panel">
+      <div class="cards">
+        <div class="card">
+          <h2>漢字練習（読み）植物編</h2>
+          <p>植物に関する漢字の読み練習。チェックした行だけ読みを表示。</p>
+          <div class="rowbtns">
+            <a class="btn small primary" href="./pages/shokubutsu.html">このページへ</a>
+          </div>
+        </div>
 
-      <div id="tableBody" class="grid body" role="rowgroup">
-        <!-- JSで行を生成 -->
+        <div class="card">
+          <h2>漢字練習（読み）魚編</h2>
+          <p>魚に関する漢字の読み練習。チェックした行だけ読みを表示。</p>
+          <div class="rowbtns">
+            <a class="btn small primary" href="./pages/sakana.html">このページへ</a>
+          </div>
+        </div>
+
+        <!-- 追加したいテーマが増えたら、同じ card をコピペで増やすだけ -->
       </div>
     </section>
 
     <div class="footer">
-      ※「読み」は非表示時に “ぼかし” や “伏せ字” を使わず、要素自体を完全に隠しています（文字数の推測が起きにくい方式）。
+      ※ GitHub Pages で公開する場合は、リポジトリ直下にこの index.html を置けばOKです。
     </div>
   </div>
-
-  <script>
-    // ====== ここを編集すると問題を増やせます ======
-    // 形式: { kanji: "漢字", yomi: "よみ" }
-    const items = [
-      { kanji: "雰囲気", yomi: "ふんいき" },
-      { kanji: "継続",   yomi: "けいぞく" },
-      { kanji: "徹底",   yomi: "てってい" },
-      { kanji: "躍進",   yomi: "やくしん" },
-      { kanji: "顕著",   yomi: "けんちょ" },
-      { kanji: "模索",   yomi: "もさく" }
-    ];
-    // ==============================================
-
-    const tableBody = document.getElementById("tableBody");
-    const toggleAllBtn = document.getElementById("toggleAllBtn");
-
-    function createRow(item, index){
-      // 1列目: 漢字
-      const c1 = document.createElement("div");
-      c1.className = "cell";
-      const k = document.createElement("div");
-      k.className = "kanji";
-      k.textContent = item.kanji;
-      c1.appendChild(k);
-
-      // 2列目: 読み（デフォルト完全非表示）
-      const c2 = document.createElement("div");
-      c2.className = "cell";
-      const y = document.createElement("div");
-      y.className = "yomi";
-      y.textContent = item.yomi;
-      y.hidden = true; // ←完全に表示しない
-      y.dataset.index = String(index);
-      c2.appendChild(y);
-
-      // 3列目: チェックボックス
-      const c3 = document.createElement("div");
-      c3.className = "cell checkwrap";
-      const label = document.createElement("label");
-      label.className = "cb";
-      label.setAttribute("aria-label", `${item.kanji} の読みを表示`);
-      const input = document.createElement("input");
-      input.type = "checkbox";
-      input.dataset.index = String(index);
-      const knob = document.createElement("span");
-      knob.className = "knob";
-      label.appendChild(input);
-      label.appendChild(knob);
-      c3.appendChild(label);
-
-      input.addEventListener("change", () => {
-        const idx = input.dataset.index;
-        const target = tableBody.querySelector(`.yomi[data-index="${idx}"]`);
-        if (!target) return;
-        target.hidden = !input.checked;
-        syncToggleAllButton();
-      });
-
-      tableBody.appendChild(c1);
-      tableBody.appendChild(c2);
-      tableBody.appendChild(c3);
-    }
-
-    function render(){
-      tableBody.innerHTML = "";
-      items.forEach((item, i) => createRow(item, i));
-      syncToggleAllButton();
-    }
-
-    function setAll(show){
-      const inputs = tableBody.querySelectorAll('input[type="checkbox"]');
-      inputs.forEach(input => {
-        input.checked = show;
-        const idx = input.dataset.index;
-        const target = tableBody.querySelector(`.yomi[data-index="${idx}"]`);
-        if (target) target.hidden = !show;
-      });
-      syncToggleAllButton();
-    }
-
-    function syncToggleAllButton(){
-      const inputs = [...tableBody.querySelectorAll('input[type="checkbox"]')];
-      const allChecked = inputs.length > 0 && inputs.every(i => i.checked);
-      toggleAllBtn.textContent = allChecked ? "全部の読みを非表示" : "全部の読みを表示";
-      toggleAllBtn.dataset.mode = allChecked ? "hide" : "show";
-    }
-
-    toggleAllBtn.addEventListener("click", () => {
-      const mode = toggleAllBtn.dataset.mode || "show";
-      if (mode === "show") setAll(true);
-      else setAll(false);
-      // 押した感触はCSS :active で表現
-    });
-
-    render();
-  </script>
 </body>
 </html>
