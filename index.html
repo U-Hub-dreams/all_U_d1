@@ -3,387 +3,350 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>漢字練習（読み隠し）</title>
+  <title>漢字練習（読み）</title>
   <meta name="description" content="チェックで読みを表示できる漢字練習サイト" />
-
   <style>
     :root{
       --bg: #0b1220;
-      --panel: rgba(255,255,255,0.06);
-      --panel2: rgba(255,255,255,0.10);
-      --text: rgba(255,255,255,0.92);
-      --muted: rgba(255,255,255,0.65);
-      --accent: #7cdbff;
-      --good: #80ffb5;
-
-      --radius: 16px;
-      --shadow: 0 10px 30px rgba(0,0,0,0.35);
-      --shadow2: 0 8px 22px rgba(0,0,0,0.25);
+      --card: rgba(255,255,255,.08);
+      --card2: rgba(255,255,255,.12);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.70);
+      --line: rgba(255,255,255,.12);
+      --accent: #7dd3fc; /* light cyan */
+      --accent2:#a78bfa; /* violet */
+      --shadow: 0 12px 30px rgba(0,0,0,.35);
+      --radius: 18px;
     }
-
-    *{ box-sizing: border-box; }
-    html,body{ height:100%; }
+    *{box-sizing:border-box}
     body{
       margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic", "Meiryo", sans-serif;
-      color: var(--text);
+      font-family: system-ui, -apple-system, "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic", sans-serif;
+      color:var(--text);
       background:
-        radial-gradient(900px 400px at 15% 0%, rgba(124,219,255,0.18), transparent 60%),
-        radial-gradient(700px 400px at 95% 10%, rgba(128,255,181,0.14), transparent 60%),
+        radial-gradient(1200px 600px at 10% 10%, rgba(125,211,252,.22), transparent 60%),
+        radial-gradient(900px 500px at 90% 20%, rgba(167,139,250,.18), transparent 55%),
+        radial-gradient(800px 600px at 40% 100%, rgba(34,197,94,.10), transparent 55%),
         var(--bg);
+      min-height:100svh;
     }
-
-    header{
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      backdrop-filter: blur(10px);
-      background: linear-gradient(to bottom, rgba(11,18,32,0.88), rgba(11,18,32,0.60));
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-    }
-    .header-inner{
-      max-width: 980px;
-      margin: 0 auto;
-      padding: 14px 14px;
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .title{
-      display:flex;
-      flex-direction: column;
-      gap: 2px;
-      min-width: 0;
-    }
-    .title h1{
-      font-size: 16px;
-      margin: 0;
-      letter-spacing: 0.02em;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .title .sub{
-      font-size: 12px;
-      color: var(--muted);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    /* 押した感触のあるボタン */
-    .btn{
-      appearance: none;
-      border: 0;
-      color: rgba(0,0,0,0.88);
-      background: linear-gradient(180deg, rgba(124,219,255,1), rgba(124,219,255,0.82));
-      border-radius: 999px;
-      padding: 10px 14px;
-      font-weight: 800;
-      font-size: 13px;
-      box-shadow: 0 10px 22px rgba(124,219,255,0.18), 0 2px 0 rgba(255,255,255,0.22) inset;
-      cursor: pointer;
-      transform: translateY(0);
-      transition: transform 0.06s ease, filter 0.2s ease, box-shadow 0.2s ease;
-      user-select: none;
-      -webkit-tap-highlight-color: transparent;
-      white-space: nowrap;
-    }
-    .btn:hover{ filter: brightness(1.03); }
-    .btn:active{
-      transform: translateY(2px) scale(0.99);
-      box-shadow: 0 6px 14px rgba(124,219,255,0.14), 0 1px 0 rgba(255,255,255,0.18) inset;
-    }
-    .btn:focus-visible{
-      outline: 2px solid rgba(124,219,255,0.75);
-      outline-offset: 3px;
-    }
-
     .wrap{
       max-width: 980px;
       margin: 0 auto;
-      padding: 18px 14px 28px;
+      padding: 20px 14px 40px;
     }
 
-    .card{
-      background: var(--panel);
-      border: 1px solid rgba(255,255,255,0.10);
+    header{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom: 14px;
+    }
+    .titleblock{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+    h1{
+      margin:0;
+      font-size: clamp(20px, 3.6vw, 28px);
+      letter-spacing:.02em;
+    }
+    .sub{
+      margin:0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .toolbar{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    /* Button (押した感触) */
+    .btn{
+      appearance:none;
+      border:1px solid rgba(255,255,255,.18);
+      background: linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.08));
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor:pointer;
+      box-shadow: 0 10px 20px rgba(0,0,0,.25);
+      transform: translateY(0);
+      transition: transform .08s ease, box-shadow .08s ease, border-color .15s ease, background .15s ease;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn:hover{
+      border-color: rgba(255,255,255,.28);
+      background: linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,.10));
+    }
+    .btn:active{
+      transform: translateY(2px);
+      box-shadow: 0 6px 14px rgba(0,0,0,.22);
+    }
+    .btn:focus-visible{
+      outline: 3px solid rgba(125,211,252,.55);
+      outline-offset: 2px;
+    }
+
+    .panel{
+      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
+      border: 1px solid rgba(255,255,255,.14);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      overflow: clip;
+      overflow:hidden;
     }
 
-    /* 3列（罫線なし） */
     .grid{
-      display: grid;
-      grid-template-columns: 1.1fr 1fr 130px;
-      align-items: center;
+      display:grid;
+      grid-template-columns: 1fr 1fr 120px;
     }
-    .head{
-      padding: 12px 14px;
-      background: rgba(255,255,255,0.06);
-      color: rgba(255,255,255,0.78);
-      font-size: 12px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
+
     .row{
-      padding: 12px 14px;
-      gap: 10px;
+      display:contents; /* 罫線の代わりにスペース感で見せる */
     }
-    .row:nth-child(even){ background: rgba(255,255,255,0.03); }
+
+    .cell{
+      padding: 14px 14px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-height: 54px;
+    }
+
+    .head .cell{
+      padding: 14px 14px;
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: none;
+      background: rgba(255,255,255,.06);
+    }
+
+    /* 行ごとの区切り：罫線は薄め＆主張しない */
+    .body .cell{
+      border-top: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.02);
+    }
+    .body .cell:nth-child(6n+1),
+    .body .cell:nth-child(6n+2),
+    .body .cell:nth-child(6n+3){
+      background: rgba(255,255,255,.03);
+    }
 
     .kanji{
-      font-size: clamp(18px, 2.6vw, 24px);
+      font-size: clamp(18px, 3.8vw, 22px);
       font-weight: 900;
-      letter-spacing: 0.04em;
+      letter-spacing: .03em;
     }
-
     .yomi{
-      font-size: clamp(14px, 2.2vw, 18px);
-      font-weight: 800;
-      display: inline-flex;
-      align-items: center;
-      justify-content: flex-start;
-      min-height: 28px;
+      font-size: 16px;
+      font-weight: 700;
+      color: rgba(255,255,255,.90);
+      letter-spacing: .02em;
     }
 
-    /* ★ぼかし無し：隠す時は「固定のダミー」を表示 */
-    .yomi.is-hidden{
-      color: rgba(255,255,255,0.80);
+    /* “完全に表示しない”ため、非表示時は要素自体を hidden */
+    .yomi[hidden]{
+      display:none !important;
     }
 
-    /* 固定ダミー：長さを一定にする（推測困難） */
-    .dummy{
-      display: inline-block;
-      width: 10.5em;           /* ここがポイント：常に同じ幅 */
-      height: 0.95em;
+    /* Checkbox: 押した感触 */
+    .checkwrap{
+      justify-content:flex-end;
+    }
+    .cb{
+      width: 44px;
+      height: 28px;
       border-radius: 999px;
-      background: rgba(255,255,255,0.16);
-      position: relative;
-      overflow: hidden;
-      transform: translateY(1px);
-    }
-    .dummy::after{
-      content:"";
-      position:absolute;
-      inset:0;
-      background: linear-gradient(90deg,
-        rgba(255,255,255,0.06),
-        rgba(255,255,255,0.18),
-        rgba(255,255,255,0.06)
-      );
-      opacity: 0.9;
-    }
-
-    .toggle{
-      display:flex;
-      justify-content: flex-end;
-      align-items: center;
-    }
-
-    /* チェックボックス（押した感触） */
-    .check{
-      width: 54px;
-      height: 32px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.10);
-      border: 1px solid rgba(255,255,255,0.12);
-      box-shadow: var(--shadow2);
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.08);
       position: relative;
       cursor: pointer;
-      transition: background 0.2s ease, border-color 0.2s ease, transform 0.06s ease;
+      flex: 0 0 auto;
+      box-shadow: 0 8px 16px rgba(0,0,0,.22);
+      transition: transform .08s ease, box-shadow .08s ease, border-color .15s ease, background .15s ease;
       -webkit-tap-highlight-color: transparent;
-      user-select: none;
-      display:inline-block;
     }
-    .check:active{ transform: translateY(2px) scale(0.99); }
-    .check input{
+    .cb:active{
+      transform: translateY(2px);
+      box-shadow: 0 5px 12px rgba(0,0,0,.18);
+    }
+    .cb input{
       position:absolute;
       inset:0;
       opacity:0;
-      cursor:pointer;
       margin:0;
+      cursor:pointer;
     }
     .knob{
       position:absolute;
-      top: 50%;
+      top:50%;
       left: 4px;
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      border-radius: 999px;
       transform: translateY(-50%);
-      background: rgba(255,255,255,0.86);
-      box-shadow: 0 6px 14px rgba(0,0,0,0.35);
-      transition: left 0.2s ease, background 0.2s ease;
-      pointer-events:none;
+      background: rgba(255,255,255,.88);
+      box-shadow: 0 6px 14px rgba(0,0,0,.25);
+      transition: left .18s ease, background .18s ease;
     }
-    .check input:checked + .knob{
-      left: 26px;
-      background: rgba(0,0,0,0.85);
+    .cb:has(input:checked){
+      background: linear-gradient(180deg, rgba(125,211,252,.40), rgba(167,139,250,.22));
+      border-color: rgba(125,211,252,.55);
     }
-    .check:has(input:checked){
-      background: rgba(128,255,181,0.22);
-      border-color: rgba(128,255,181,0.35);
-    }
-
-    @media (max-width: 520px){
-      .grid{ grid-template-columns: 1.1fr 1fr 100px; }
-      .row{ padding: 12px 12px; }
-      .head{ padding: 11px 12px; }
-      .btn{ padding: 10px 12px; font-size: 12px; }
-      .dummy{ width: 9.2em; }
+    .cb:has(input:checked) .knob{
+      left: 20px;
+      background: white;
     }
 
-    .footer-note{
+    .footer{
       margin-top: 12px;
       color: var(--muted);
       font-size: 12px;
-      line-height: 1.5;
+      line-height: 1.6;
       padding: 0 4px;
+    }
+
+    /* Responsive: スマホではチェック列を少し縮める */
+    @media (max-width: 520px){
+      .grid{ grid-template-columns: 1fr 1fr 92px; }
+      .cell{ padding: 12px 12px; min-height: 52px; }
+      .btn{ padding: 10px 12px; font-size: 13px; }
     }
   </style>
 </head>
-
 <body>
-  <header>
-    <div class="header-inner">
-      <div class="title">
-        <h1>漢字練習（読みを隠す）</h1>
-        <div class="sub">チェックで「読み」を表示できます（隠す時は固定バー表示）</div>
+  <div class="wrap">
+    <header>
+      <div class="titleblock">
+        <h1>漢字練習（読み）</h1>
+        <p class="sub">チェックを入れた行だけ「読み」を表示します。上のボタンで一括表示/非表示もできます。</p>
       </div>
-      <button id="toggleAllBtn" class="btn" type="button" aria-pressed="false">
-        全部の読みを表示
-      </button>
-    </div>
-  </header>
+      <div class="toolbar">
+        <button id="toggleAllBtn" class="btn" type="button">全部の読みを表示</button>
+      </div>
+    </header>
 
-  <main class="wrap">
-    <section class="card">
-      <div class="grid head">
-        <div>漢字</div>
-        <div>読み</div>
-        <div style="text-align:right;">読みを表示</div>
+    <section class="panel" aria-label="漢字練習リスト">
+      <div class="grid head" role="rowgroup">
+        <div class="cell" role="columnheader">漢字</div>
+        <div class="cell" role="columnheader">読み</div>
+        <div class="cell" role="columnheader" style="justify-content:flex-end;">読みを表示</div>
       </div>
 
-      <div id="list"></div>
+      <div id="tableBody" class="grid body" role="rowgroup">
+        <!-- JSで行を生成 -->
+      </div>
     </section>
 
-    <div class="footer-note">
-      ・問題の追加は、このファイル内の <b>DATA</b> を編集してください。
+    <div class="footer">
+      ※「読み」は非表示時に “ぼかし” や “伏せ字” を使わず、要素自体を完全に隠しています（文字数の推測が起きにくい方式）。
     </div>
-  </main>
+  </div>
 
   <script>
-    // ====== ここを編集すれば、問題を差し替えられます ======
-    const DATA = [
-      { kanji: "勉強", yomi: "べんきょう" },
-      { kanji: "準備", yomi: "じゅんび" },
-      { kanji: "確認", yomi: "かくにん" },
-      { kanji: "経験", yomi: "けいけん" },
-      { kanji: "努力", yomi: "どりょく" },
-      { kanji: "解答", yomi: "かいとう" },
-      { kanji: "複雑", yomi: "ふくざつ" },
-      { kanji: "重要", yomi: "じゅうよう" },
-      { kanji: "成績", yomi: "せいせき" },
-      { kanji: "提出", yomi: "ていしゅつ" },
+    // ====== ここを編集すると問題を増やせます ======
+    // 形式: { kanji: "漢字", yomi: "よみ" }
+    const items = [
+      { kanji: "雰囲気", yomi: "ふんいき" },
+      { kanji: "継続",   yomi: "けいぞく" },
+      { kanji: "徹底",   yomi: "てってい" },
+      { kanji: "躍進",   yomi: "やくしん" },
+      { kanji: "顕著",   yomi: "けんちょ" },
+      { kanji: "模索",   yomi: "もさく" }
     ];
-    // ======================================================
+    // ==============================================
 
-    const listEl = document.getElementById("list");
+    const tableBody = document.getElementById("tableBody");
     const toggleAllBtn = document.getElementById("toggleAllBtn");
-    let allVisible = false;
 
-    function makeDummy(){
-      const s = document.createElement("span");
-      s.className = "dummy";
-      s.setAttribute("aria-hidden", "true");
-      return s;
-    }
+    function createRow(item, index){
+      // 1列目: 漢字
+      const c1 = document.createElement("div");
+      c1.className = "cell";
+      const k = document.createElement("div");
+      k.className = "kanji";
+      k.textContent = item.kanji;
+      c1.appendChild(k);
 
-    function setRowVisible(row, visible){
-      const yomiCell = row.querySelector(".yomi");
-      const cb = row.querySelector('input[type="checkbox"]');
+      // 2列目: 読み（デフォルト完全非表示）
+      const c2 = document.createElement("div");
+      c2.className = "cell";
+      const y = document.createElement("div");
+      y.className = "yomi";
+      y.textContent = item.yomi;
+      y.hidden = true; // ←完全に表示しない
+      y.dataset.index = String(index);
+      c2.appendChild(y);
 
-      cb.checked = visible;
+      // 3列目: チェックボックス
+      const c3 = document.createElement("div");
+      c3.className = "cell checkwrap";
+      const label = document.createElement("label");
+      label.className = "cb";
+      label.setAttribute("aria-label", `${item.kanji} の読みを表示`);
+      const input = document.createElement("input");
+      input.type = "checkbox";
+      input.dataset.index = String(index);
+      const knob = document.createElement("span");
+      knob.className = "knob";
+      label.appendChild(input);
+      label.appendChild(knob);
+      c3.appendChild(label);
 
-      // 表示：本物の読み / 非表示：固定ダミーバー
-      yomiCell.innerHTML = "";
-      if (visible){
-        yomiCell.classList.remove("is-hidden");
-        yomiCell.textContent = yomiCell.dataset.real;
-      } else {
-        yomiCell.classList.add("is-hidden");
-        yomiCell.appendChild(makeDummy());
-      }
-    }
+      input.addEventListener("change", () => {
+        const idx = input.dataset.index;
+        const target = tableBody.querySelector(`.yomi[data-index="${idx}"]`);
+        if (!target) return;
+        target.hidden = !input.checked;
+        syncToggleAllButton();
+      });
 
-    function syncAllState(){
-      const cbs = [...listEl.querySelectorAll('input[type="checkbox"]')];
-      const checkedCount = cbs.filter(cb => cb.checked).length;
-      allVisible = (checkedCount === cbs.length);
-      toggleAllBtn.textContent = allVisible ? "全部の読みを非表示" : "全部の読みを表示";
-      toggleAllBtn.setAttribute("aria-pressed", String(allVisible));
+      tableBody.appendChild(c1);
+      tableBody.appendChild(c2);
+      tableBody.appendChild(c3);
     }
 
     function render(){
-      const frag = document.createDocumentFragment();
+      tableBody.innerHTML = "";
+      items.forEach((item, i) => createRow(item, i));
+      syncToggleAllButton();
+    }
 
-      DATA.forEach((item, idx) => {
-        const row = document.createElement("div");
-        row.className = "grid row";
-
-        const c1 = document.createElement("div");
-        c1.className = "kanji";
-        c1.textContent = item.kanji;
-
-        const c2 = document.createElement("div");
-        c2.className = "yomi is-hidden";
-        c2.dataset.real = item.yomi;
-        c2.appendChild(makeDummy()); // 初期は固定ダミー
-
-        const c3 = document.createElement("div");
-        c3.className = "toggle";
-
-        const label = document.createElement("label");
-        label.className = "check";
-        label.setAttribute("aria-label", `${item.kanji} の読みを表示`);
-
-        const input = document.createElement("input");
-        input.type = "checkbox";
-
-        const knob = document.createElement("span");
-        knob.className = "knob";
-
-        input.addEventListener("change", () => {
-          setRowVisible(row, input.checked);
-          syncAllState();
-        });
-
-        label.appendChild(input);
-        label.appendChild(knob);
-        c3.appendChild(label);
-
-        row.appendChild(c1);
-        row.appendChild(c2);
-        row.appendChild(c3);
-
-        frag.appendChild(row);
+    function setAll(show){
+      const inputs = tableBody.querySelectorAll('input[type="checkbox"]');
+      inputs.forEach(input => {
+        input.checked = show;
+        const idx = input.dataset.index;
+        const target = tableBody.querySelector(`.yomi[data-index="${idx}"]`);
+        if (target) target.hidden = !show;
       });
+      syncToggleAllButton();
+    }
 
-      listEl.innerHTML = "";
-      listEl.appendChild(frag);
-
-      syncAllState();
+    function syncToggleAllButton(){
+      const inputs = [...tableBody.querySelectorAll('input[type="checkbox"]')];
+      const allChecked = inputs.length > 0 && inputs.every(i => i.checked);
+      toggleAllBtn.textContent = allChecked ? "全部の読みを非表示" : "全部の読みを表示";
+      toggleAllBtn.dataset.mode = allChecked ? "hide" : "show";
     }
 
     toggleAllBtn.addEventListener("click", () => {
-      allVisible = !allVisible;
-      const rows = [...listEl.querySelectorAll(".row")];
-      rows.forEach(row => setRowVisible(row, allVisible));
-      syncAllState();
+      const mode = toggleAllBtn.dataset.mode || "show";
+      if (mode === "show") setAll(true);
+      else setAll(false);
+      // 押した感触はCSS :active で表現
     });
 
     render();
