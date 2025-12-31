@@ -1,315 +1,197 @@
 <!doctype html>
 <html lang="ja">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>漢字練習</title>
-  <style>
-    :root{
-      --bg:#0b0f19;
-      --card:#111827;
-      --text:#e5e7eb;
-      --muted:#9ca3af;
-      --accent:#60a5fa;
-      --btn:#1f2937;
-      --btnHover:#273244;
-      --shadow: 0 10px 25px rgba(0,0,0,.35);
-      --radius:16px;
-    }
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>漢字練習</title>
 
-    *{ box-sizing: border-box; }
-    body{
-      margin:0;
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Hiragino Sans", "Noto Sans JP", "Yu Gothic", sans-serif;
-      background: radial-gradient(1200px 600px at 20% 0%, rgba(96,165,250,.18), transparent 60%),
-                  radial-gradient(900px 500px at 90% 10%, rgba(52,211,153,.10), transparent 55%),
-                  var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-    }
+<style>
+:root{
+  --bg:#0b1020;
+  --card:#111827;
+  --row:#0f172a;
+  --rowShow:#1e293b;
+  --text:#e5e7eb;
+  --muted:#9ca3af;
+  --accent:#60a5fa;
+}
 
-    .wrap{
-      max-width: 980px;
-      margin: 0 auto;
-      padding: 18px 14px 32px;
-    }
+*{box-sizing:border-box}
 
-    header{
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      backdrop-filter: blur(10px);
-      background: linear-gradient(to bottom, rgba(11,15,25,.92), rgba(11,15,25,.70));
-      padding: 12px 0;
-      margin: 0 0 14px;
-    }
+body{
+  margin:0;
+  font-family: system-ui,-apple-system,"Hiragino Sans","Noto Sans JP";
+  background:linear-gradient(180deg,#020617,#020617 30%,#020617);
+  color:var(--text);
+}
 
-    .topbar{
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      justify-content: space-between;
-    }
+header{
+  padding:16px;
+  text-align:center;
+}
 
-    h1{
-      font-size: 16px;
-      margin: 0;
-      letter-spacing: .02em;
-      color: var(--text);
-      font-weight: 700;
-    }
+header h1{
+  margin:0 0 12px;
+  font-size:16px;
+  font-weight:700;
+}
 
-    .btn{
-      appearance: none;
-      border: 1px solid rgba(255,255,255,.12);
-      background: linear-gradient(to bottom, rgba(255,255,255,.06), rgba(255,255,255,.02));
-      color: var(--text);
-      padding: 10px 14px;
-      border-radius: 12px;
-      cursor: pointer;
-      font-weight: 700;
-      box-shadow: 0 6px 14px rgba(0,0,0,.25);
-      transform: translateY(0);
-      transition: transform .06s ease, box-shadow .06s ease, background .12s ease, border-color .12s ease;
-      user-select: none;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .btn:hover{ background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.18); }
-    .btn:active{
-      transform: translateY(2px);
-      box-shadow: 0 3px 8px rgba(0,0,0,.28);
-    }
+button{
+  padding:10px 16px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.15);
+  background:#111827;
+  color:#fff;
+  font-weight:700;
+  cursor:pointer;
+  box-shadow:0 6px 16px rgba(0,0,0,.35);
+}
+button:active{
+  transform:translateY(2px);
+  box-shadow:0 3px 8px rgba(0,0,0,.4);
+}
 
-    .card{
-      background: rgba(17,24,39,.78);
-      border: 1px solid rgba(255,255,255,.08);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
+main{
+  max-width:900px;
+  margin:0 auto;
+  padding:0 14px 32px;
+}
 
-    /* 3列グリッド（罫線なし） */
-    .grid{
-      display: grid;
-      grid-template-columns: 1fr 1fr 140px;
-    }
+.table{
+  background:var(--card);
+  border-radius:16px;
+  padding:12px;
+}
 
-    .head{
-      background: rgba(255,255,255,.04);
-      color: var(--muted);
-      font-weight: 800;
-      font-size: 13px;
-      letter-spacing: .04em;
-    }
+.header{
+  display:grid;
+  grid-template-columns:1fr 1fr 80px;
+  padding:8px 12px;
+  font-size:12px;
+  color:var(--muted);
+  font-weight:700;
+}
 
-    .cell{
-      padding: 14px 14px;
-      display: flex;
-      align-items: center;
-      min-height: 54px;
-    }
+.row{
+  display:grid;
+  grid-template-columns:1fr 1fr 80px;
+  align-items:center;
+  padding:14px 12px;
+  margin-top:6px;
+  border-radius:12px;
+  background:var(--row);
+  transition:.15s;
+}
 
-    .kanji{
-      font-size: 20px;
-      font-weight: 800;
-      letter-spacing: .02em;
-    }
+.row.show{
+  background:var(--rowShow);
+}
 
-    .reading{
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--text);
-      opacity: 1;
-      transition: opacity .12s ease;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+.kanji{
+  font-size:20px;
+  font-weight:800;
+}
 
-    .reading.hidden{
-      opacity: 0;
-      pointer-events: none;
-    }
+.reading{
+  font-size:16px;
+  font-weight:700;
+  opacity:0;
+  transition:.15s;
+}
 
-    /* チェックボックス：押した感触 */
-    .checkWrap{
-      justify-content: center;
-      gap: 10px;
-    }
-    input[type="checkbox"]{
-      width: 22px;
-      height: 22px;
-      accent-color: var(--accent);
-      cursor: pointer;
-      transform: translateY(0);
-      transition: transform .06s ease, filter .12s ease;
-      -webkit-tap-highlight-color: transparent;
-    }
-    input[type="checkbox"]:active{
-      transform: translateY(1px) scale(0.98);
-      filter: brightness(1.05);
-    }
+.row.show .reading{
+  opacity:1;
+}
 
-    /* 行（ヘッダー以外） */
-    .row{
-      background: transparent;
-    }
-    .row:nth-child(even){
-      background: rgba(255,255,255,.02);
-    }
+.check{
+  text-align:center;
+}
 
-    /* スマホ対応：3列は維持しつつ幅を調整 */
-    @media (max-width: 520px){
-      .grid{ grid-template-columns: 1.2fr 1fr 110px; }
-      .cell{ padding: 12px 12px; min-height: 50px; }
-      .kanji{ font-size: 19px; }
-      .reading{ font-size: 15px; }
-      .btn{ padding: 10px 12px; border-radius: 12px; }
-    }
+input[type="checkbox"]{
+  width:22px;
+  height:22px;
+  accent-color:var(--accent);
+  cursor:pointer;
+}
 
-    /* 下の補助説明 */
-    .hint{
-      margin-top: 10px;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.5;
-    }
-  </style>
+@media(max-width:520px){
+  .kanji{font-size:18px}
+  .reading{font-size:15px}
+}
+</style>
 </head>
+
 <body>
-  <header>
-    <div class="wrap">
-      <div class="topbar">
-        <h1>漢字練習</h1>
-        <button id="toggleAllBtn" class="btn" type="button">全部の読みを表示</button>
-      </div>
+
+<header>
+  <h1>漢字練習</h1>
+  <button id="toggle">全部の読みを表示</button>
+</header>
+
+<main>
+  <div class="table" id="table">
+    <div class="header">
+      <div>漢字</div>
+      <div>読み</div>
+      <div>表示</div>
     </div>
-  </header>
+  </div>
+</main>
 
-  <main class="wrap">
-    <section class="card">
-      <div id="table" class="grid"></div>
-    </section>
-    <div class="hint">
-      ・各行のチェックでその行だけ「読み」を表示/非表示にできます。<br>
-      ・上のボタンで全部まとめて表示/非表示が切り替わります。
-    </div>
-  </main>
+<script>
+const data=[
+  ["自信","じしん"],
+  ["準備","じゅんび"],
+  ["挑戦","ちょうせん"],
+  ["効率","こうりつ"],
+  ["確認","かくにん"],
+  ["経験","けいけん"],
+  ["集中","しゅうちゅう"],
+  ["継続","けいぞく"]
+];
 
-  <script>
-    // ====== ここを書き換えれば問題を増やせます ======
-    const DATA = [
-      { kanji: "自信", reading: "じしん" },
-      { kanji: "準備", reading: "じゅんび" },
-      { kanji: "挑戦", reading: "ちょうせん" },
-      { kanji: "効率", reading: "こうりつ" },
-      { kanji: "確認", reading: "かくにん" },
-      { kanji: "経験", reading: "けいけん" },
-      { kanji: "集中", reading: "しゅうちゅう" },
-      { kanji: "継続", reading: "けいぞく" },
-    ];
-    // =============================================
+const table=document.getElementById("table");
+const toggle=document.getElementById("toggle");
+let all=false;
 
-    const tableEl = document.getElementById("table");
-    const toggleAllBtn = document.getElementById("toggleAllBtn");
+const rows=[];
 
-    // 全体状態（false: 全部非表示 / true: 全部表示）
-    let isAllShown = false;
+data.forEach(d=>{
+  const row=document.createElement("div");
+  row.className="row";
 
-    function makeHeader() {
-      const headers = ["漢字", "読み", "読みを表示"];
-      headers.forEach(text => {
-        const cell = document.createElement("div");
-        cell.className = "cell head";
-        cell.textContent = text;
-        tableEl.appendChild(cell);
-      });
-    }
+  row.innerHTML=`
+    <div class="kanji">${d[0]}</div>
+    <div class="reading">${d[1]}</div>
+    <div class="check"><input type="checkbox"></div>
+  `;
 
-    function makeRow(item, idx) {
-      // 1列目：漢字
-      const c1 = document.createElement("div");
-      c1.className = "cell row kanji";
-      c1.textContent = item.kanji;
+  const cb=row.querySelector("input");
+  cb.onchange=()=>{
+    row.classList.toggle("show",cb.checked);
+    sync();
+  };
 
-      // 2列目：読み（初期は非表示）
-      const c2 = document.createElement("div");
-      c2.className = "cell row";
-      const readingSpan = document.createElement("span");
-      readingSpan.className = "reading hidden";
-      readingSpan.textContent = item.reading;
-      c2.appendChild(readingSpan);
+  table.appendChild(row);
+  rows.push({row,cb});
+});
 
-      // 3列目：チェックボックス
-      const c3 = document.createElement("div");
-      c3.className = "cell row checkWrap";
-      const cb = document.createElement("input");
-      cb.type = "checkbox";
-      cb.setAttribute("aria-label", `${item.kanji} の読みを表示`);
+function setAll(v){
+  all=v;
+  rows.forEach(r=>{
+    r.cb.checked=v;
+    r.row.classList.toggle("show",v);
+  });
+  toggle.textContent=v?"全部の読みを非表示":"全部の読みを表示";
+}
 
-      cb.addEventListener("change", () => {
-        const show = cb.checked;
-        readingSpan.classList.toggle("hidden", !show);
+function sync(){
+  if(rows.every(r=>r.cb.checked)) setAll(true);
+  else if(rows.every(r=>!r.cb.checked)) setAll(false);
+}
 
-        // 全体表示ボタンの状態を、現在の行状態から再計算
-        syncGlobalStateFromRows();
-      });
+toggle.onclick=()=>setAll(!all);
+</script>
 
-      c3.appendChild(cb);
-
-      // DOMへ追加
-      tableEl.appendChild(c1);
-      tableEl.appendChild(c2);
-      tableEl.appendChild(c3);
-
-      return { checkbox: cb, readingEl: readingSpan };
-    }
-
-    let rowRefs = [];
-
-    function render() {
-      tableEl.innerHTML = "";
-      rowRefs = [];
-      makeHeader();
-      DATA.forEach((item, i) => {
-        rowRefs.push(makeRow(item, i));
-      });
-
-      // 初期：全部非表示
-      setAll(false);
-    }
-
-    function setAll(show) {
-      isAllShown = show;
-      rowRefs.forEach(r => {
-        r.checkbox.checked = show;
-        r.readingEl.classList.toggle("hidden", !show);
-      });
-      toggleAllBtn.textContent = show ? "全部の読みを非表示" : "全部の読みを表示";
-    }
-
-    function syncGlobalStateFromRows() {
-      const allChecked = rowRefs.every(r => r.checkbox.checked);
-      const noneChecked = rowRefs.every(r => !r.checkbox.checked);
-
-      // 「全部表示/全部非表示」どちらにも揃ってないときは、ボタンは「全部の読みを表示」に寄せる
-      if (allChecked) {
-        isAllShown = true;
-        toggleAllBtn.textContent = "全部の読みを非表示";
-      } else if (noneChecked) {
-        isAllShown = false;
-        toggleAllBtn.textContent = "全部の読みを表示";
-      } else {
-        isAllShown = false;
-        toggleAllBtn.textContent = "全部の読みを表示";
-      }
-    }
-
-    toggleAllBtn.addEventListener("click", () => {
-      setAll(!isAllShown);
-    });
-
-    render();
-  </script>
 </body>
 </html>
