@@ -20,11 +20,11 @@
       </div>
     </header>
 
-    <section class="panel" aria-label="魚編リスト">
+    <section class="panel" aria-label="本屋大賞">
       <div class="grid head" role="rowgroup">
-        <div class="cell" role="columnheader">漢字</div>
-        <div class="cell" role="columnheader">読み</div>
-        <div class="cell" role="columnheader" style="justify-content:flex-end;">読みを表示</div>
+        <div class="cell" role="columnheader">年</div>
+        <div class="cell" role="columnheader">作品/作者</div>
+        <div class="cell" role="columnheader" style="justify-content:flex-end;">答えを表示</div>
       </div>
 
       <div id="tableBody" class="grid body" role="rowgroup"></div>
@@ -38,12 +38,28 @@
   <script src="../app.js"></script>
   <script>
     const items = [
-      { kanji: "鮭", yomi: "さけ" },
-      { kanji: "鯖", yomi: "さば" },
-      { kanji: "鰯", yomi: "いわし" },
-      { kanji: "鯛", yomi: "たい" },
-      { kanji: "鰹", yomi: "かつお" },
-      { kanji: "鮪", yomi: "まぐろ" }
+      { kanji: "2004", yomi: "博士の愛した数式/小川洋子" },
+      { kanji: "2005", yomi: "夜のピクニック/恩田陸" },
+      { kanji: "2006", yomi: "東京タワー オカンとボクと、時々、オトン/リリー・フランキー"},
+      { kanji: "2007", yomi: "一瞬の風になれ/佐藤多佳子" },
+      { kanji: "2008", yomi: "ゴールデンスランバー/伊坂幸太郎" },
+      { kanji: "2009", yomi: "告白/湊かなえ" },
+      { kanji: "2010", yomi: "天地明察/冲方丁" },
+      { kanji: "2011", yomi: "謎解きはディナーのあとで/東川篤哉" },
+      { kanji: "2012", yomi: "舟を編む/三浦しをん" },
+      { kanji: "2013", yomi: "海賊とよばれた男/百田尚樹" },
+      { kanji: "2014", yomi: "村上海賊の娘/和田竜" },
+      { kanji: "2015", yomi: "鹿の王/上橋菜穂子" },
+      { kanji: "2016", yomi: "羊と鋼の森/宮下奈都" },
+      { kanji: "2017", yomi: "蜜蜂と遠雷/恩田陸" },
+      { kanji: "2018", yomi: "かがみの孤城/辻村深月" },
+      { kanji: "2019", yomi: "そして、バトンは渡された/瀬尾まいこ" },
+      { kanji: "2020", yomi: "流浪の月/凪良ゆう" },
+      { kanji: "2021", yomi: "52ヘルツのクジラたち/町田そのこ" },
+      { kanji: "2022", yomi: "同志少女よ、敵を撃て/逢坂冬馬" },
+      { kanji: "2023", yomi: "汝、星のごとく/凪良ゆう" },
+      { kanji: "2024", yomi: "成瀬は天下を取りに行く/宮島未奈" },
+      { kanji: "2025", yomi: "カフネ/阿部暁子" }
     ];
 
     initKanjiPage({ items });
